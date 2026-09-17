@@ -1,4 +1,4 @@
-"""Plotly 可视化模块.
+﻿"""Plotly 可视化模块.
 
 统一使用科技感深色主题,提供 K 线图、相关性热力图、行业涨跌榜等
 交互式可视化函数,所有函数返回 ``plotly.graph_objects.Figure`` 对象.
@@ -72,7 +72,7 @@ def kline(df: pd.DataFrame, title: str = "K 线图") -> go.Figure:
         ), row=1, col=1)
 
     bar_colors = [
-        COLORS["up"] if c > o else COLORS["down"]
+        COLORS["up"] if c >= o else COLORS["down"]
         for o, c in zip(df["open"], df["close"])
     ]
     fig.add_trace(go.Bar(
