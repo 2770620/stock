@@ -16,12 +16,30 @@ import pandas as pd
 DEFAULT_DB_PATH = Path("data/stock.db")
 
 
+_DAILY_SCHEMA = """
+CREATE TABLE IF NOT EXISTS daily (
+    code      TEXT NOT NULL,
+    date      TEXT NOT NULL,
+    open      REAL,
+    close     REAL,
+    high      REAL,
+    low       REAL,
+    volume    REAL,
+    amount    REAL,
+    pct_change REAL,
+    turnover  REAL,
+    PRIMARY KEY (code, date)
+)
+"""
+
+
 def get_conn(db_path: Optional[Path] = None) -> sqlite3.Connection:
-    """获取 SQLite 连接,目录不存在则自动创建."""
+    """获取 SQLite 连接,目录不存在则自动创建,并确保 daily 表已建."""
     path = Path(db_path) if db_path else DEFAULT_DB_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(path)
     conn.execute("PRAGMA journal_mode=WAL;")
+    conn.executescript(_DAILY_SCHEMA)
     return conn
 
 
